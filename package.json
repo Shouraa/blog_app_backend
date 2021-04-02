@@ -1,0 +1,39 @@
+{
+  "name": "thesis-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "\"echo \\\"Error: no test specified\\\" && exit 1\"",
+    "build:ui": "rm -rf build && cd ../thesis-frontend/ && npm run build --prod && cp -r build ../Thesis-backend",
+    "deploy": "git push heroku main",
+    "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
+    "logs:prod": "heroku logs --tail",
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shouraa/Thesis-backend.git"
+  },
+  "author": "Shora",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Shouraa/Thesis-backend/issues"
+  },
+  "homepage": "https://github.com/Shouraa/Thesis-backend#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.12.3",
+    "mongoose-unique-validator": "^2.0.3"
+  },
+  "devDependencies": {
+    "eslint": "^7.23.0",
+    "nodemon": "^2.0.7"
+  }
+}
