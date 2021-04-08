@@ -1,18 +1,10 @@
-require('dotenv').config();
+const http = require('http');
+const app = require('./app');
+const config = require('./utils/config');
+const logger = require('./utils/logger');
 
-const express = require('express');
-const app = express();
-const cors = require('cors');
+const server = http.createServer(app);
 
-app.use(express.static('build'));
-app.use(express.json());
-app.use(cors());
-
-app.get('/', (request, response) => {
-  response.send('<h1>Hello Backend!</h1>');
-});
-
-const PORT = 3001;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+server.listen(config.PORT, () => {
+  logger.info(`Server running on port ${config.PORT}`);
 });

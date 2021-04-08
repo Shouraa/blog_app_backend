@@ -1,7 +1,0 @@
-POST http://localhost:3001/api/tests
-Content-Type: application/json
-
-{
-    "content": "new",
- 
-  }

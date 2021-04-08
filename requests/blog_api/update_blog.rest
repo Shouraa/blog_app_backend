@@ -1,0 +1,9 @@
+PUT  http://localhost:3001/api/blogs/604b877406249634343bd5fb
+Content-Type: application/json
+
+{
+    "title": "MongoDB",
+    "author": "Marcos",
+    "url": "www.www.www",
+    "likes": 23
+  }
