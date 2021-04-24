@@ -1,9 +1,9 @@
 POST http://localhost:3001/api/blogs
 Content-Type: application/json
-Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlY29uZFVzZXIiLCJpZCI6IjYwNmUxMWJlNjQyNWI1YWZjZDc1ZDE5ZiIsImlhdCI6MTYxNzgyNjI5MH0.tuirLanFSjzqW-6hwhCxDIZKE-hhrvd-zl7otNSIxLg
+Authorization: bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNlY29uZFVzZXIiLCJpZCI6IjYwNmUxMWJlNjQyNWI1YWZjZDc1ZDE5ZiIsImlhdCI6MTYxNzk4Njk5NX0.47JDMl3hzbPlSMfn0e6Q-jq5uMjA3LCKdwVMpvkZvzY
 
 {
-    "title": "new",
+    "title": "to check",
     "url": "www.www.www",
     "likes": 2
   }
