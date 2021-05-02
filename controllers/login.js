@@ -1,34 +1,42 @@
-const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const loginRouter = require('express').Router();
 const User = require('../models/user');
 
-loginRouter.post('/', async (request, response) => {
-  const body = request.body;
+const {
+  createAccessToken,
+  createRefreshToken,
+  sendAccessToken,
+  sendRefreshToken,
+} = require('../utils/tokens');
 
-  const user = await User.findOne({ username: body.username });
+loginRouter.post('/', async (req, res) => {
+  const body = req.body;
+  // console.log(body);
 
-  const passwordCheck =
-    user === null
+  try {
+    const user = await User.findOne({ username: body.username });
+    // console.log('user from login controller', user);
+
+    const passwordCheck = !user
       ? false
       : await bcrypt.compare(body.password, user.passwordHash);
 
-  if (!(user && passwordCheck)) {
-    throw new Error('Invalid credentials');
+    if (!passwordCheck) {
+      throw new Error('Invalid credentials');
+    }
+    const accesstoken = createAccessToken(user.id);
+    const refreshtoken = createRefreshToken(user.id);
+
+    user.refreshtoken = refreshtoken;
+    await user.save();
+
+    sendRefreshToken(res, refreshtoken);
+    sendAccessToken(user.username, res, accesstoken);
+  } catch (err) {
+    res.send({
+      error: `${err.message}`,
+    });
   }
-
-  const tokenHolder = {
-    username: user.username,
-    id: user._id,
-  };
-
-  const token = jwt.sign(tokenHolder, process.env.SECRET, {
-    expiresIn: 60 * 60,
-  });
-
-  response
-    .status(200)
-    .send({ token, username: user.username, name: user.name });
 });
 
 module.exports = loginRouter;

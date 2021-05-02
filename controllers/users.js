@@ -3,30 +3,39 @@ const bcrypt = require('bcrypt');
 const usersRouter = require('express').Router();
 const User = require('../models/user');
 
-usersRouter.get('/', async (request, response) => {
+usersRouter.get('/', async (req, res) => {
   const users = await User.find({}).populate('blogs');
 
-  response.json(users);
+  res.json(users);
 });
 
-usersRouter.post('/', async (request, response) => {
-  const body = request.body;
+usersRouter.post('/register', async (req, res) => {
+  const body = req.body;
   if (body.password === undefined || body.password.length < 3) {
-    response.status(400).json({ error: 'password missing or too short' });
+    res.status(400).json({ error: 'password missing or too short' });
   }
 
-  const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(body.password, saltRounds);
+  try {
+    const user = await User.findOne({ username: body.username });
+    if (user) throw new Error('User already exist');
 
-  const user = new User({
-    username: body.username,
-    name: body.name,
-    passwordHash,
-  });
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(body.password, saltRounds);
 
-  const savedUser = await user.save();
+    const newUser = new User({
+      username: body.username,
+      name: body.name,
+      passwordHash,
+      blogs: [],
+    });
 
-  response.json(savedUser);
+    const savedUser = await newUser.save();
+    res.json(savedUser);
+  } catch (err) {
+    res.send({
+      error: `${err.message}`,
+    });
+  }
 });
 
 module.exports = usersRouter;

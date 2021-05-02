@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
       ref: 'Blog',
     },
   ],
+  refreshtoken: String,
 });
 
 userSchema.plugin(uniqueValidator);
@@ -21,6 +22,7 @@ userSchema.set('toJSON', {
     delete returnedObject._id;
     delete returnedObject.__v;
     delete returnedObject.passwordHash;
+    delete returnedObject.refreshtoken;
   },
 });
 
