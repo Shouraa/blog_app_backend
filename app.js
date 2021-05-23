@@ -12,8 +12,8 @@ const protectedRouter = require('./controllers/protected');
 const loginRouter = require('./controllers/login');
 const usersRouter = require('./controllers/users');
 const blogsRouter = require('./controllers/blogs');
-const middleware = require('./utils/middleware');
 const refreshtokenRouter = require('./controllers/refresh_token');
+const middleware = require('./utils/middleware');
 
 const url = config.MONGODB_URI;
 
