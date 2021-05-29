@@ -7,7 +7,7 @@ const isAuth = (req) => {
   const token = authorization.split(' ')[1];
 
   const { userId } = verify(token, process.env.ACCESS_TOKEN_SECRET);
-  console.log(userId);
+  // console.log(userId);
 
   return userId;
 };

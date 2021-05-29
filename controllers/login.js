@@ -11,11 +11,9 @@ const {
 
 loginRouter.post('/', async (req, res) => {
   const body = req.body;
-  // console.log(body);
 
   try {
     const user = await User.findOne({ username: body.username });
-    // console.log('user from login controller', user);
 
     const passwordCheck = !user
       ? false

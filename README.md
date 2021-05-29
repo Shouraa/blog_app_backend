@@ -1,1 +1,1 @@
-# Thesis-backend
+# blog_app_backend

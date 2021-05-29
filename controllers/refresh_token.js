@@ -21,7 +21,7 @@ refreshtokenRouter.post('/', async (req, res) => {
 
   try {
     payload = verify(token, process.env.REFRESH_TOKEN_SECRET);
-    console.log(payload);
+    console.log('payload', payload);
   } catch (err) {
     return res.send({ accesstoken: ' ' });
   }
@@ -37,7 +37,7 @@ refreshtokenRouter.post('/', async (req, res) => {
   // token exists, create new refresh and access token
   const accesstoken = createAccessToken(user.id);
   const refreshtoken = createRefreshToken(user.id);
-
+  console.log('refreshtoken', refreshtoken);
   user.refreshtoken = refreshtoken;
   await user.save();
 

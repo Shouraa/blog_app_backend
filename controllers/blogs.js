@@ -25,10 +25,6 @@ blogsRouter.post('/', async (req, res) => {
 
   console.log(req.headers);
 
-  // if (!req.headers.authorization) {
-  //   res.status(401).json({ error: 'Not Authorized' });
-  // }
-
   const token = req.headers.authorization.split(' ')[1];
 
   const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
@@ -89,8 +85,14 @@ blogsRouter.delete('/:id', async (req, res) => {
     await blog.delete();
     res.status(204).end();
   } else {
-    res.status(401).json({ error: 'you are not the creator of this blog' });
+    res
+      .status(401)
+      .json({ error: 'you are not allowed to perform this action' });
   }
 });
 
 module.exports = blogsRouter;
+
+// if (!req.headers.authorization) {
+//   res.status(401).json({ error: 'Not Authorized' });
+// }
