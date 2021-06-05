@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const express = require('express');
-const app = express();
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
@@ -14,6 +13,8 @@ const logger = require('./utils/logger');
 // const refreshtokenRouter = require('./controllers/refresh_token');
 // const middleware = require('./utils/middleware');
 const blogsRouter = require('./controllers/blogs');
+
+const app = express();
 
 logger.info('connecting to', config.MONGODB_URI);
 
