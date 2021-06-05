@@ -16,6 +16,19 @@ const logger = require('./utils/logger');
 const blogsRouter = require('./controllers/blogs');
 
 const url = config.MONGODB_URI;
+mongoose
+  .connect(url, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: false,
+    useCreateIndex: true,
+  })
+  .then(() => {
+    logger.info('connected to MongoDB');
+  })
+  .catch((error) => {
+    logger.error('error connecting to MongoDB:', error.message);
+  });
 
 logger.info('connecting to', config.MONGODB_URI);
 
@@ -44,19 +57,6 @@ app.get('/', (req, res) => {
 // app.use(middleware.errorHandler);
 
 // Database Connection
-mongoose
-  .connect(url, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useFindAndModify: false,
-    useCreateIndex: true,
-  })
-  .then(() => {
-    logger.info('connected to MongoDB');
-  })
-  .catch((error) => {
-    logger.error('error connecting to MongoDB:', error.message);
-  });
 
 module.exports = app;
 
