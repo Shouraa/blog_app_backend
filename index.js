@@ -42,9 +42,8 @@ app.get('/', (req, res) => {
 // app.use(middleware.unknownEndpoint);
 // app.use(middleware.errorHandler);
 
-const url = config.MONGODB_URI;
 mongoose
-  .connect(url, {
+  .connect(config.MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
