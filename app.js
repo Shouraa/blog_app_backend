@@ -30,6 +30,9 @@ mongoose
   .catch((error) => {
     logger.error('error connecting to MongoDB:', error.message);
   });
+
+mongoose.set('useFindAndModify', false);
+
 logger.info('connecting to', config.MONGODB_URI);
 
 // app.use(express.static('build'));

@@ -1,5 +1,5 @@
 {
-  "name": "thesis-backend",
+  "name": "blog_app_backend",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "\"echo \\\"Error: no test specified\\\" && exit 1\"",
-    "build:ui": "rm -rf build && cd ../thesis-frontend/ && npm run build --prod && cp -r build ../Thesis-backend",
+    "build:ui": "rm -rf build && cd ../thesis-frontend/ && npm run build --prod && cp -r build ../blog_app_backend",
     "deploy": "git push heroku main",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push && npm run deploy",
     "logs:prod": "heroku logs --tail",
@@ -15,16 +15,17 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shouraa/Thesis-backend.git"
+    "url": "git+https://github.com/Shouraa/blog_app_backend.git"
   },
   "author": "Shora",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Shouraa/Thesis-backend/issues"
+    "url": "https://github.com/Shouraa/blog_app_backend/issues"
   },
-  "homepage": "https://github.com/Shouraa/Thesis-backend#readme",
+  "homepage": "https://github.com/Shouraa/blog_app_backend#readme",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

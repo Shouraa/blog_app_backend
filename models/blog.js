@@ -2,9 +2,18 @@ const mongoose = require('mongoose');
 
 const blogSchema = new mongoose.Schema({
   title: String,
+  message: String,
   author: String,
-  url: String,
-  likes: Number,
+  tags: [String],
+  imgFile: String,
+  likeCount: {
+    type: Number,
+    default: 0,
+  },
+  createdAt: {
+    type: Date,
+    default: new Date(),
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
