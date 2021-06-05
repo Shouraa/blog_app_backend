@@ -45,7 +45,7 @@ app.get('/', (req, res) => {
 console.log(typeof config.MONGODB_URI);
 
 mongoose
-  .connect(String(config.MONGODB_URI), {
+  .connect(config.MONGODB_URI), {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
