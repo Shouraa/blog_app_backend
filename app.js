@@ -54,6 +54,10 @@ app.use('/api/protected', protectedRouter);
 app.use('/api/refresh_token', refreshtokenRouter);
 app.use('/api/logout', logoutRouter);
 
+app.use('/', (req, res) => {
+  res.send('Welcome to the app API');
+});
+
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 
