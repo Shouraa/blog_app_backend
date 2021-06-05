@@ -1,6 +1,6 @@
 const blogsRouter = require('express').Router();
 const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 // const mongooseUniqueValidator = require('mongoose-unique-validator');
 
 const Blog = require('../models/blog');
