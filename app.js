@@ -47,6 +47,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // app.use(middleware.tokenExtractor);
+app.get('/', (req, res) => {
+  res.send('Welcome to the app API');
+});
+
 app.use('/api/blogs', blogsRouter);
 app.use('/api/users', usersRouter);
 app.use('/api/login', loginRouter);
@@ -56,9 +60,5 @@ app.use('/api/logout', logoutRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
-
-app.get('/', (req, res) => {
-  res.send('Welcome to the app API');
-});
 
 module.exports = app;
