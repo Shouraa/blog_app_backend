@@ -58,7 +58,7 @@ app.use('/api/protected', protectedRouter);
 app.use('/api/refresh_token', refreshtokenRouter);
 app.use('/api/logout', logoutRouter);
 
-// app.use(middleware.unknownEndpoint);
-// app.use(middleware.errorHandler);
+app.use(middleware.unknownEndpoint);
+app.use(middleware.errorHandler);
 
 module.exports = app;
