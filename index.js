@@ -43,8 +43,11 @@ app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
 console.log(process.env.MONGODB_URI);
 
+const MONGODB_URI =
+  'mongodb+srv://fullstack:farhangkuni@cluster0.cjkmw.mongodb.net/thesis-app?retryWrites=true&w=majority';
+
 mongoose
-  .connect(config.MONGODB_URI, {
+  .connect(MONGODB_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
