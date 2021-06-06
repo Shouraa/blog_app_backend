@@ -41,6 +41,7 @@ app.use('/api/logout', logoutRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);
+console.log(process.env.MONGODB_URI);
 
 mongoose
   .connect(config.MONGODB_URI, {
