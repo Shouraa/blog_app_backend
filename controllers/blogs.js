@@ -1,12 +1,7 @@
-const blogsRouter = require('express').Router();
 const mongoose = require('mongoose');
-// const jwt = require('jsonwebtoken');
-// const mongooseUniqueValidator = require('mongoose-unique-validator');
-
 const Blog = require('../models/blog');
-// const User = require('../models/user');
 
-blogsRouter.get('/', async (req, res) => {
+const getBlogs = async (req, res) => {
   try {
     const blogs = await Blog.find({}).populate('user', {
       username: 1,
@@ -17,47 +12,33 @@ blogsRouter.get('/', async (req, res) => {
   } catch (error) {
     res.status(404).json({ message: error.message });
   }
-});
+};
 
-blogsRouter.get('/:id', async (req, res) => {
-  const returnedBlog = await Blog.findById(req.params.id);
+const getBlog = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const returnedBlog = await Blog.findById(id);
 
-  if (returnedBlog) {
-    res.json(returnedBlog);
-  } else {
-    res.status(404).end();
+    res.status(200).json(returnedBlog);
+  } catch (error) {
+    res.status(404).json({ message: error.message });
   }
-});
+};
 
-blogsRouter.post('/', async (req, res) => {
+const createBlog = async (req, res) => {
   const body = req.body;
-
-  // console.log(req.headers);
-  // const token = req.headers.authorization.split(' ')[1];
-
-  // const decodedToken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
-
-  // console.log('decodedToken', decodedToken);
-
-  // if (!token || !decodedToken.userId) {
-  //   return res.status(401).json({ error: 'Authentication failed' });
-  // }
-
-  // const user = await User.findById(decodedToken.userId);
 
   const newBlog = new Blog(body);
   try {
     const savedBlog = await newBlog.save();
-    // user.blogs = user.blogs.concat(savedBlog._id);
-    // await user.save();
 
     res.status(201).json(savedBlog);
   } catch (error) {
     res.status(409).json({ message: error.message });
   }
-});
+};
 
-blogsRouter.patch('/:id', async (req, res) => {
+const updateBlog = async (req, res) => {
   const { id } = req.params;
   const blog = req.body;
   if (!mongoose.Types.ObjectId.isValid(id))
@@ -70,25 +51,31 @@ blogsRouter.patch('/:id', async (req, res) => {
   );
 
   res.json(updatedBlog);
-});
+};
 
-blogsRouter.patch('/:id/like', async (req, res) => {
+const likeBlog = async (req, res) => {
   const { id } = req.params;
+
+  if (!req.userId) return res.json({ message: 'Not Authenticated ' });
+
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send('No blog was found');
 
   const blog = await Blog.findById(id);
-  const updatedBlog = await Blog.findByIdAndUpdate(
-    id,
-    {
-      likeCount: blog.likeCount + 1,
-    },
-    { new: true }
-  );
-  res.json(updatedBlog);
-});
 
-blogsRouter.delete('/:id', async (req, res) => {
+  const index = blog.likeCount.findIndex((id) => id === String(req.userId));
+
+  if (index === -1) {
+    blog.likeCount.push(req.userId);
+  } else {
+    blog.likeCount = blog.likeCount.filter((id) => id !== String(req.userId));
+  }
+
+  const updatedBlog = await Blog.findByIdAndUpdate(id, blog, { new: true });
+  res.json(updatedBlog);
+};
+
+const deleteBlog = async (req, res) => {
   const { id } = req.params;
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send('No blog was found');
@@ -96,31 +83,13 @@ blogsRouter.delete('/:id', async (req, res) => {
   await Blog.findByIdAndRemove(id);
 
   res.json({ message: 'Blog deleted' });
+};
 
-  // const decodedToken = jwt.verify(req.token, process.env.SECRET);
-
-  // if (!req.token || !decodedToken.id) {
-  //   return res.status(401).json({ error: 'token missing or invalid' });
-  // }
-
-  // const blog = await Blog.findById(req.params.id);
-
-  // if (!blog) {
-  //   res.status(400).json({ error: 'blog not found' });
-  // }
-
-  // if (blog.user.toString() === decodedToken.id.toString()) {
-  //   await blog.delete();
-  //   res.status(204).end();
-  // } else {
-  //   res
-  //     .status(401)
-  //     .json({ error: 'you are not allowed to perform this action' });
-  // }
-});
-
-module.exports = blogsRouter;
-
-// if (!req.headers.authorization) {
-//   res.status(401).json({ error: 'Not Authorized' });
-// }
+module.exports = {
+  getBlogs,
+  getBlog,
+  createBlog,
+  updateBlog,
+  likeBlog,
+  deleteBlog,
+};

@@ -1,41 +1,63 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
-const usersRouter = require('express').Router();
 const User = require('../models/user');
 
-usersRouter.get('/', async (req, res) => {
-  const users = await User.find({}).populate('blogs');
-
-  res.json(users);
-});
-
-usersRouter.post('/register', async (req, res) => {
-  const body = req.body;
-  if (body.password === undefined || body.password.length < 3) {
-    res.status(400).json({ error: 'password missing or too short' });
-  }
+const signin = async (req, res) => {
+  const { email, password } = req.body;
 
   try {
-    const user = await User.findOne({ username: body.username });
-    if (user) throw new Error('User already exist');
+    const existingUser = await User.findOne({ email });
 
-    const saltRounds = 10;
-    const passwordHash = await bcrypt.hash(body.password, saltRounds);
+    if (!existingUser)
+      return res.status(404).json({ message: 'User does not exist' });
 
-    const newUser = new User({
-      username: body.username,
-      name: body.name,
-      passwordHash,
-      blogs: [],
-    });
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      existingUser.password
+    );
 
-    const savedUser = await newUser.save();
-    res.json(savedUser);
-  } catch (err) {
-    res.send({
-      error: `${err.message}`,
-    });
+    if (!isPasswordCorrect)
+      return res.status(400).json({ message: 'Invalid Credentials' });
+
+    const token = jwt.sign(
+      { email: existingUser.email, id: existingUser.id },
+      'test',
+      { expiresIn: '1h' }
+    );
+
+    res.status(200).json({ result: existingUser, token });
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong' });
   }
-});
+};
 
-module.exports = usersRouter;
+const signup = async (req, res) => {
+  const { email, password, firstName, lastName, confirmPassword } = req.body;
+
+  try {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) return res.status(400).json({ message: 'User exists!' });
+    if (password !== confirmPassword)
+      return res.status(400).json({ message: 'Passwords do not match!' });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const result = await User.create({
+      email,
+      password: hashedPassword,
+      name: `${firstName} ${lastName}`,
+    });
+
+    const token = jwt.sign({ email: result.email, id: result.id }, 'test', {
+      expiresIn: '1h',
+    });
+
+    res.status(200).json({ result, token });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { signin, signup };
