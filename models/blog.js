@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const blogSchema = new mongoose.Schema({
   title: String,
   message: String,
+  name: String,
   author: String,
   tags: [String],
   imgFile: String,
@@ -13,10 +14,6 @@ const blogSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: new Date(),
-  },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
   },
 });
 

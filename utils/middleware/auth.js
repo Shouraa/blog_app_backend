@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+// const User = require('../../models/user');
 
 const auth = async (req, res, next) => {
   console.log('req.body', req.body);
@@ -6,8 +7,9 @@ const auth = async (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
 
     let decodedData = jwt.verify(token, 'test');
+    console.log('decoded data', decodedData);
 
-    req.userId = decodedData?.id;
+    req.userId = decodedData.id;
 
     next();
   } catch (error) {

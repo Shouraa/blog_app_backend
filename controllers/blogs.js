@@ -28,7 +28,11 @@ const getBlog = async (req, res) => {
 const createBlog = async (req, res) => {
   const body = req.body;
 
-  const newBlog = new Blog(body);
+  const newBlog = new Blog({
+    ...body,
+    author: req.userId,
+    createdAt: new Date().toISOString(),
+  });
   try {
     const savedBlog = await newBlog.save();
 
@@ -55,8 +59,9 @@ const updateBlog = async (req, res) => {
 
 const likeBlog = async (req, res) => {
   const { id } = req.params;
+  console.log(req.params);
 
-  if (!req.userId) return res.json({ message: 'Not Authenticated ' });
+  if (!req.userId) return res.json({ message: 'Not Authenticated' });
 
   if (!mongoose.Types.ObjectId.isValid(id))
     return res.status(404).send('No blog was found');
